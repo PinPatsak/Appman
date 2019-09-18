@@ -22,19 +22,38 @@ namespace BoatRental
             var model = CheckSeat(seat, list);
         }
 
-        private static Boat CheckSeat(int seat, List<Boat> demoList)
+        private static List<Boat> CheckSeat(int seat, List<Boat> demoList)
         {
             Boat lowModel = demoList.Aggregate((i1, i2) => i1.Seat < i2.Seat ? i1 : i2);
-            if (seat < lowModel.Seat)
+
+            List<Boat> list = new List<Boat>();
+
+            if (seat <= lowModel.Seat)
             {
-                return lowModel;
+                list.Add(lowModel);
+                return list;
             }
-            else
+            
+            while (true)
             {
-               
+                Boat temp = demoList.Aggregate((i1, i2) => i1.Seat <= seat && seat < i2.Seat ? i1 : i2);
+                seat = seat - temp.Seat;
+                list.Add(temp);
+                if (seat < lowModel.Seat)
+                {
+                    if(seat != 0)
+                        list.Add(lowModel);
+
+                    break;
+                }
+
             }
-            return null;
+
+            
+            return list;
         }
+
+
 
     }
 
