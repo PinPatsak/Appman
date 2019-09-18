@@ -33,23 +33,47 @@ namespace BoatRental
                 list.Add(lowModel);
                 return list;
             }
-            
+
             while (true)
             {
-                Boat temp = demoList.Aggregate((i1, i2) => i1.Seat <= seat && seat < i2.Seat ? i1 : i2);
-                seat = seat - temp.Seat;
-                list.Add(temp);
-                if (seat < lowModel.Seat)
-                {
-                    if(seat != 0)
-                        list.Add(lowModel);
 
+                Boat temp = new Boat();
+                for (int i = 0; i < demoList.Count; i++)
+                {
+                    if (i == demoList.Count - 1)
+                    {
+                        temp = demoList[i];
+                    }
+                    else
+                    {
+                        if (demoList[i].Seat < seat && seat <= demoList[i + 1].Seat)
+                        {
+                            temp = demoList[i + 1];
+                            break;
+
+                        }
+                    }
+
+                }
+                if (seat <= lowModel.Seat)
+                {
+                    seat = seat - lowModel.Seat;
+                    list.Add(lowModel);
+                }
+                else
+                {
+                    seat = seat - temp.Seat;
+                    list.Add(temp);
+                }
+              
+                if (seat <= 0)
+                {
                     break;
                 }
 
             }
 
-            
+
             return list;
         }
 
