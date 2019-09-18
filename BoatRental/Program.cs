@@ -19,7 +19,22 @@ namespace BoatRental
 
             int seat = Convert.ToInt32(value);
 
-            var model = CheckSeat(seat, list);
+            var models = CheckSeat(seat, list);
+            var result = models.GroupBy(g => g.Size).Select(
+                    s => new BoatDTO
+                    {
+                        Name = s.Key,
+                        Amount = s.Sum(c => c.Cost),
+                        Count = s.Count()
+                    });
+           
+           foreach(var m in result)
+            {
+                Console.WriteLine($"{m.Name}: {m.Count}");
+            }
+
+            Console.WriteLine($"Cost : {result.Sum(item => item.Amount)}");
+
         }
 
         private static List<Boat> CheckSeat(int seat, List<Boat> demoList)
@@ -73,12 +88,18 @@ namespace BoatRental
 
             }
 
-
             return list;
         }
 
 
 
+    }
+
+    public class BoatDTO
+    {
+        public string Name { get; set; }
+        public int Count { get; set; }
+        public int Amount { get; set; }
     }
 
 
